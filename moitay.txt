@@ -1,0 +1,163 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+
+namespace ExercApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+           
+            const string Estoque = "Estoque.csv";
+
+            List<string> itens;
+            List<string> Cadastrar;
+            List<string> Quantidade;
+
+            
+            if (File.Exists(Estoque))
+            {
+                itens = new List<string>(File.ReadAllLines(Estoque));
+                Cadastrar = new List<string>(File.ReadAllLines(Estoque));
+                Console.WriteLine("Dados carregados com sucesso do arquivo 'estoque.csv'!");
+                Console.WriteLine("Pressione qualquer tecla para iniciar...");
+                Console.ReadKey();
+            }
+            else
+            {
+                itens = new List<string>();
+                Cadastrar = new List<string>();
+            }
+
+            
+            bool sair = false;
+
+           
+            while (!sair)
+            {
+                Console.Clear();
+
+                
+                Console.WriteLine("================================");
+                Console.WriteLine("    Gerenciador de Estoque");
+                Console.WriteLine("================================");
+                Console.WriteLine("1. Inserir um novo item");
+                Console.WriteLine("2. Procurar um item");
+                Console.WriteLine("3. Remover um item");
+                Console.WriteLine("4. Atualizar um item");
+                Console.WriteLine("5. Listar todos os itens");
+                Console.WriteLine("6. Salvar itens em arquivo"); 
+                Console.WriteLine("7. Sair do programa");        
+                Console.WriteLine("================================");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+
+                
+                switch (opcao)
+                {
+                    
+                    case "1":
+                        Console.Write("Digite o item para inserir: ");
+                        string itensParaInserir = Console.ReadLine();
+                        itens.Add(itensParaInserir);
+                        Console.WriteLine($"'{itensParaInserir}' foi adicionado com sucesso!");
+                        break;
+
+                    
+                    case "2":
+                        Console.Write("Digite o item que deseja procurar: ");
+                        string itemParaProcurar = Console.ReadLine();
+                        if (itens.Contains(itemParaProcurar))
+                        {
+                            Console.WriteLine($"BOA NOTÍCIA: O item '{itemParaProcurar}' foi encontrado na lista!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"AVISO: O item '{itemParaProcurar}' NÃO foi encontrado.");
+                        }
+                        break;
+
+                    
+                    case "3":
+                        Console.Write("Digite o item que deseja remover: ");
+                        string itempararemover = Console.ReadLine();
+                        if (itens.Remove(itempararemover))
+                        {
+                            Console.WriteLine($"'{itempararemover}' foi removido com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"AVISO: O item '{itempararemover}' não foi encontrado para remover.");
+                        }
+                        break;
+
+                    
+                    case "4":
+                        Console.Write("Digite o item que deseja ATUALIZAR:");
+                        string itemAntigo = Console.ReadLine();
+                        int indice = itens.IndexOf(itemAntigo);
+                        if (indice != -1)
+                        {
+                            Console.Write($"Digite o NOVO item para substituir '{itemAntigo}': ");
+                            string itemNovo = Console.ReadLine();
+                            itens[indice] = itemNovo;
+                            Console.WriteLine("Item atualizado com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"AVISO: O item '{itemAntigo}' não foi encontrado para atualizar.");
+                        }
+                        break;
+
+                    
+                    case "5":
+                        Console.WriteLine("\n--- Lista de itens Cadastrados ---");
+                        if (itens.Count == 0)
+                        {
+                            Console.WriteLine("A lista está vazia.");
+                        }
+                        else
+                        {
+                            foreach (string itemNaLista in itens)
+                            {
+                                Console.WriteLine($"- {itemNaLista}");
+                            }
+                        }
+                        Console.WriteLine("------------------------------------");
+                        break;
+
+                    
+                    case "6":
+                        
+                        File.WriteAllLines(Estoque, itens);
+                        Console.WriteLine($"Lista de itens salva com sucesso no arquivo '{Estoque}'!");
+                        break;
+
+                    
+                    case "7":
+                        Console.WriteLine("Encerrando o programa... Até logo!");
+                        sair = true;
+                        break;
+
+                   
+                    default:
+                        
+                        Console.WriteLine("Opção inválida! Por favor, escolha um número de 1 a 7.");
+                        break;
+                }
+
+                if (!sair)
+                {
+                    Console.WriteLine("\nPressione qualquer tecla para continuar...");
+                    Console.ReadKey();
+                }
+            }
+        }
+    }
+}
